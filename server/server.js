@@ -29,8 +29,22 @@ app.post('/api/usres/register', (req, res) => {
   })
 })
 
-app.post('/api/users/register', (req, res) => {
-  res.status(200)
+app.post('/api/users/login', (req, res) => {
+  // find the email
+  User.findOne({ email: req.body.email }, (err, user) => {
+    if (!user) return res.json({ loginSuccess: false, message: 'Auth Failed, email not found' })
+    // check password
+    user.comparePassword(req.body.password, (err, isMatch) => {
+      if (!isMatch) return res.json({ loginSuccess: false, message: 'Wrong Password' })
+    // generate a token
+      user.generateToken((err, user)=>{
+        
+      })
+    })
+  })
+
+
+  
 })
 
 const port = process.env.PORT || 3002
